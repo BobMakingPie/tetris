@@ -7,8 +7,9 @@ def printBoard(board): ### Print the board, line for line.
 
 def placeRandom(board, pieces, pieceNames): ### Choose a piece at random, then place it on the board.
     ### Inputs: board (list), pieces (dict), pieceNames(list)
-    ### Returns: board (list)
-    piece = pieces[pieceNames[random.randint(1, len(pieces)) - 1]]
+    ### Returns: board (list), name (str)
+    pieceName = pieceNames[random.randint(1, len(pieces)) - 1]
+    piece = pieces[pieceName]
     for i in range(len(piece)):
         line = piece[i]
         if line[0] == ".":
@@ -20,7 +21,7 @@ def placeRandom(board, pieces, pieceNames): ### Choose a piece at random, then p
             boardLine = list(board[i + 1])
             boardLine[3:3 + len(line)] = line
             board[i + 1] = "".join(boardLine)
-    return board
+    return board, pieceName
 
 def hashify(board): ### Turn the active (movable) piece to hashes.
     ### Input: board (list)
@@ -34,10 +35,12 @@ def hashify(board): ### Turn the active (movable) piece to hashes.
         board[i] = "".join(line)
     return board
 
-def rotate(board, dir): ### Rotate the active piece in the direction specified (or passes through if no direction specified) (in a really roundabout fashion)
-    ### Inputs: board (list), dir (str)
+def rotate(board, dir, pieceName): ### Rotate the active piece in the direction specified (or passes through if no direction specified) (in a really roundabout fashion)
+    ### Inputs: board (list), dir (str), pieceName (str)
     ### Returns: board (list)
     ## Set turn direction as a boolean (I am lazy)
+    if pieceName == "o":
+        return board
     if dir.lower().strip() == "r":
         turnRight = True
     elif dir.lower().strip() == "l":
@@ -63,10 +66,10 @@ def rotate(board, dir): ### Rotate the active piece in the direction specified (
     ## Find the coords for the active piece, with o as the origin
     originCoords = []
     for coord in coords:
-        originCoords.append([(coord[0] - ocoord[0]), - (coord[1] - ocoord[1])])
+        originCoords.append([(coord[0] - ocoord[0]), (coord[1] - ocoord[1])])
 
     ## Edit the coords to rotate in the direction
-    if turnRight:
+    if not turnRight:
         for i in range(len(originCoords)):
             coord = originCoords[i]
             originCoords[i] = [coord[1], - coord[0]]
@@ -77,7 +80,6 @@ def rotate(board, dir): ### Rotate the active piece in the direction specified (
     print(originCoords)
 
     ## Translate the coords back to (0, 0) as origin
-    # TODO figure out correct reversal of neg/pos
     coords = []
     for coord in originCoords:
         coords.append([(coord[0] + ocoord[0]), (coord[1] + ocoord[1])])
@@ -88,5 +90,9 @@ def rotate(board, dir): ### Rotate the active piece in the direction specified (
         line = list(board[coord[1]])
         line[coord[0]] = "x"
         board[coord[1]] = "".join(line)
-
     return board
+
+def drop(board): ### Drops the active piece by 1.
+    ### Inputs: board (list)
+    ### Outputs: board (list)
+    print(meme)

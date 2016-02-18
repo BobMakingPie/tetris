@@ -19,15 +19,12 @@ for name in pieceNames:
 ## Create blank board
 board = ["//////////"] + [".........."] * 15 + ["##########"]
 
-## Print blank board
-functions.printBoard(board)
-
 ##### Start game logic
 touchingTop = False # Change when a "#" is found in the top line, at the end
 # SINGLE RUN: Remember to reindent the line and uncomment (TODO)
 #while not touchingTop:
     ## Place piece on the board (on the 4th dot from left)
-board = functions.placeRandom(board, pieces, pieceNames)
+board, pieceName = functions.placeRandom(board, pieces, pieceNames)
 functions.printBoard(board)
-board = functions.rotate(board, input("Direction of turn (r/l/blank): "))
+board = functions.rotate(board, input("Direction of turn (r/l/blank): "), pieceName)
 functions.printBoard(board)
