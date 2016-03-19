@@ -77,13 +77,11 @@ def rotate(board, dir, pieceName): ### Rotate the active piece in the direction 
         for i in range(len(originCoords)):
             coord = originCoords[i]
             originCoords[i] = [- coord[1], coord[0]]
-    print(originCoords)
 
     ## Translate the coords back to (0, 0) as origin
     coords = []
     for coord in originCoords:
         coords.append([(coord[0] + ocoord[0]), (coord[1] + ocoord[1])])
-    print(coords)
 
     ## Place each x back, rotated
     for coord in coords:
@@ -95,4 +93,23 @@ def rotate(board, dir, pieceName): ### Rotate the active piece in the direction 
 def drop(board): ### Drops the active piece by 1.
     ### Inputs: board (list)
     ### Outputs: board (list)
-    print(meme)
+    ## Store current board in preProcessBoard (for some reason simple assig.
+    ## does not work)
+    preProcessBoard = []
+    for i in board:
+        preProcessBoard.append(i)
+
+    ## Find lines where piece is located
+    pieceLines = []
+    for i in range(len(board)):
+        line = board[i]
+        if "x" in line or "o" in line:
+            pieceLines.append(i)
+
+    ## Drop the piece (TODO: only drop piece, not entire line)
+    for line in pieceLines:
+        board[line + 1] = preProcessBoard[line]
+    board[pieceLines[0]] = ".........."
+
+    ## Return the board
+    return board
