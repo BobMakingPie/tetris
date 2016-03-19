@@ -10,7 +10,7 @@ Then run from command line/shell/terminal/whatever:
 ```sh
 python main.py
 ```
-(use python3 if both 2.x and 3.x are installed)
+(use `python3` if both 2.x and 3.x are installed)
 
 ### Memes ###
 This is a private repo, why am I bothering
