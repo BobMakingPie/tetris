@@ -107,9 +107,13 @@ def drop(board): ### Drops the active piece by 1.
             pieceLines.append(i)
 
     ## Drop the piece (TODO: only drop piece, not entire line)
-    for line in pieceLines:
-        board[line + 1] = preProcessBoard[line]
-    board[pieceLines[0]] = ".........."
+    if board[pieceLines[len(pieceLines) - 1] + 1] == "##########":
+        last = True
+    else:
+        last = False
+        for line in pieceLines:
+            board[line + 1] = preProcessBoard[line]
+        board[pieceLines[0]] = ".........."
 
     ## Return the board
-    return board
+    return board, last
