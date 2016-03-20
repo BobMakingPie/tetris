@@ -1,5 +1,7 @@
 import random
 
+memes = "dank"
+
 def printBoard(board): ### Print the board, line for line.
     ### Input: board (list)
     for line in board:
@@ -106,6 +108,34 @@ def drop(board): ### Drops the active piece by 1.
         if "x" in line or "o" in line:
             pieceLines.append(i)
 
+    ## Find which part of each line the piece is on
+    piece = {}
+    for i in pieceLines:
+        line = board[i]
+        if "o" in line:
+            if "x" not in line:
+                firstInstance = line.index("o")
+                lastInstance = 9 - line[::-1].index("o")
+            else:
+                firstX = line.index("x")
+                firstO = line.index("o")
+                if firstX < firstO:
+                    firstInstance = firstX
+                else:
+                    firstInstance = firstO
+
+                lastX = 9 - line[::-1].index("x")
+                lastO = 9 - line[::-1].index("o")
+                if lastX > lastO:
+                    lastInstance = firstX
+                else:
+                    lastInstance = firstO
+        else:
+            firstInstance = line.index("x")
+            lastInstance = 9 - line[::-1].index("x")
+        piece[i] = [firstInstance, lastInstance]
+        print(piece[i])
+
     ## Drop the piece (TODO: only drop piece, not entire line)
     if board[pieceLines[len(pieceLines) - 1] + 1] == "##########":
         last = True
@@ -115,5 +145,33 @@ def drop(board): ### Drops the active piece by 1.
             board[line + 1] = preProcessBoard[line]
         board[pieceLines[0]] = ".........."
 
+    if board[pieceLines[len(pieceLines) - 1] + 2] == "##########":
+        last = True
+
     ## Return the board
     return board, last
+
+def validate(board, comO, comT=None): ### Validate a move.
+    ### Inputs: board (list), comO (str), comT(str)
+    ### Outputs: valid (bool)
+    ### Key: comO = command (t = translate, r = rotate, d = drop)
+    ###      comT = direction (r = right, l = left)
+
+    ## For lack of switch statements, split commands up
+    if comO == "r":
+        ## If rotate
+        dank = "meme"
+    elif comO == "d":
+        ## If drop
+        ## Find lines that the piece lives on
+        pieceLines = []
+        for i in range(len(board)):
+            line = board[i]
+            if "x" in line or "o" in line:
+                pieceLines.append(i)
+    elif comO == "t":
+        ## If translate
+        dank = "meme"
+    else:
+        ## Else, return False
+        return False
