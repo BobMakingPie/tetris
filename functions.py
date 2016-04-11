@@ -113,65 +113,53 @@ def drop(board): ### Drops the active piece by 1.
     for i in pieceLines:
         line = board[i]
         if "o" in line:
-            if "x" not in line:
+            if not "x" in line:
                 firstInstance = line.index("o")
-                lastInstance = 9 - line[::-1].index("o")
+                lastInstance = line.index("o")
             else:
-                firstX = line.index("x")
-                firstO = line.index("o")
-                if firstX < firstO:
-                    firstInstance = firstX
+                firstInstance = None
+                if line.index("x") < line.index("o"):
+                    firstInstance = line.index("x")
                 else:
-                    firstInstance = firstO
+                    firstInstance = line.index("o")
 
-                lastX = 9 - line[::-1].index("x")
-                lastO = 9 - line[::-1].index("o")
-                if lastX > lastO:
-                    lastInstance = firstX
+                lastInstance = None
+                if line.index("x") > line.index("o"):
+                    lastInstance = line.index("x")
                 else:
-                    lastInstance = firstO
+                    lastInstance = line.index("o")
         else:
             firstInstance = line.index("x")
             lastInstance = 9 - line[::-1].index("x")
         piece[i] = [firstInstance, lastInstance]
-        print(piece[i])
 
-    ## Drop the piece (TODO: only drop piece, not entire line)
-    if board[pieceLines[len(pieceLines) - 1] + 1] == "##########":
+    ## Drop the piece
+    pieceBot = piece[pieceLines[-1]]
+    if "#" in board[pieceLines[-1] + 1][pieceBot[0]:pieceBot[1]]:
+        ## Refuse to drop if it is the last possible drop
         last = True
     else:
+        ## If a drop is possible, do so
         last = False
         for line in pieceLines:
-            board[line + 1] = preProcessBoard[line]
-        board[pieceLines[0]] = ".........."
+            linePiece = piece[line]
+            if linePiece[0] != linePiece[1]:
+                toDrop = preProcessBoard[line][linePiece[0]:linePiece[1]]
+            else:
+                toDrop = preProcessBoard[line][linePiece[0]]
+            print(toDrop)
+            lineList = list(board[line + 1])
+            lineList[linePiece[0]:linePiece[1]] = toDrop
+            board[line + 1] = "".join(lineList)
+        ## Heal line above dropped piece
+        prevline = list(preProcessBoard[pieceLines[0]])
+        pieceTop = piece[pieceLines[0]]
+
+        prevline[pieceTop[0]:pieceTop[1]] = "." * (pieceTop[1] - pieceTop[0])
+        board[pieceLines[0]] = "".join(prevline)
 
     if board[pieceLines[len(pieceLines) - 1] + 2] == "##########":
         last = True
 
     ## Return the board
     return board, last
-
-def validate(board, comO, comT=None): ### Validate a move.
-    ### Inputs: board (list), comO (str), comT(str)
-    ### Outputs: valid (bool)
-    ### Key: comO = command (t = translate, r = rotate, d = drop)
-    ###      comT = direction (r = right, l = left)
-
-    ## For lack of switch statements, split commands up
-    if comO == "r":
-        ## If rotate
-        dank = "meme"
-    elif comO == "d":
-        ## If drop
-        ## Find lines that the piece lives on
-        pieceLines = []
-        for i in range(len(board)):
-            line = board[i]
-            if "x" in line or "o" in line:
-                pieceLines.append(i)
-    elif comO == "t":
-        ## If translate
-        dank = "meme"
-    else:
-        ## Else, return False
-        return False
