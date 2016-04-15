@@ -2,6 +2,8 @@ import random
 
 memes = "dank"
 
+## i went through much pain and suffering to make this please enjoy it
+
 def printBoard(board): ### Print the board, line for line.
     ### Input: board (list)
     for line in board:
@@ -124,8 +126,8 @@ def drop(board): ### Drops the active piece by 1.
                     firstInstance = line.index("o")
 
                 lastInstance = None
-                if line.index("x") > line.index("o"):
-                    lastInstance = line.index("x")
+                if line[::-1].index("x") < line[::-1].index("o"):
+                    lastInstance = 9 - line[::-1].index("x")
                 else:
                     lastInstance = line.index("o")
         else:
@@ -135,31 +137,36 @@ def drop(board): ### Drops the active piece by 1.
 
     ## Drop the piece
     pieceBot = piece[pieceLines[-1]]
-    if "#" in board[pieceLines[-1] + 1][pieceBot[0]:pieceBot[1]]:
+    if "#" in board[pieceLines[-1] + 1][pieceBot[0]:pieceBot[1] + 1]:
         ## Refuse to drop if it is the last possible drop
         last = True
     else:
         ## If a drop is possible, do so
         last = False
-        for line in pieceLines:
+        for line in pieceLines[::-1]:
             linePiece = piece[line]
             if linePiece[0] != linePiece[1]:
-                toDrop = preProcessBoard[line][linePiece[0]:linePiece[1]]
+                ## If piece line length > 1
+                toDrop = preProcessBoard[line][linePiece[0]:linePiece[1] + 1]
+                heal = list(board[line])
+                heal[linePiece[0]:linePiece[1] + 1] = "." * (linePiece[1] + 1 - linePiece[0])
+                board[line] = "".join(heal)
             else:
                 toDrop = preProcessBoard[line][linePiece[0]]
+                heal = list(board[line])
+                heal[linePiece[0]] = "."
+                board[line] = "".join(heal)
             print(toDrop)
             lineList = list(board[line + 1])
-            lineList[linePiece[0]:linePiece[1]] = toDrop
+            print(lineList[linePiece[0]:linePiece[1] + 1])
+            lineList[linePiece[0]:linePiece[1] + 1] = toDrop
             board[line + 1] = "".join(lineList)
         ## Heal line above dropped piece
         prevline = list(preProcessBoard[pieceLines[0]])
         pieceTop = piece[pieceLines[0]]
 
-        prevline[pieceTop[0]:pieceTop[1]] = "." * (pieceTop[1] - pieceTop[0])
+        prevline[pieceTop[0]:pieceTop[1] + 1] = "." * (pieceTop[1] + 1 - pieceTop[0])
         board[pieceLines[0]] = "".join(prevline)
-
-    if board[pieceLines[len(pieceLines) - 1] + 2] == "##########":
-        last = True
 
     ## Return the board
     return board, last

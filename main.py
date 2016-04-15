@@ -29,13 +29,48 @@ if functions.memes == "dank":
 
         last = False
         while not last:
-            ## Rotate/move piece
-            direction = input("Direction of turn (r/l/blank): ")
-            board = functions.rotate(board, direction, pieceName)
+            instruct = False
+            while not instruct:
+                ## Rotate/move piece
+                command = list(input("Command (type \"h\" for help): ").lower().strip())
+                if not command:
+                    print("Invalid command.")
+                elif command[0] == "d":
+                    instruct = True
+                elif command[0] == "h":
+                    print("Commands:")
+                    print("Rotate: type r[direction]")
+                    print("        Example:")
+                    print("          To rotate to the right, type \"rr\"")
+                    print()
+                    print("Shift: type s[direction]")
+                    print("       Example:")
+                    print("         To shift to the left, type \"sl\"")
+                    print()
+                    print("Drop: type \"d\"")
+                    print("      Drop piece without performing an action")
+                    print()
+                    print("Help: type \"h\"")
+                    print("      Display this help text")
+
+                elif command[0] == "r" and len(command) == 2:
+                    if command[1] in ["r", "l"]:
+                        instruct = True
+                        direction = command[1]
+                        board = functions.rotate(board, direction, pieceName)
+                        functions.printBoard(board)
+                    else:
+                        print("Invalid rotate direction")
+                else:
+                    print("Invalid command")
 
             ## Drop piece one unit
             board, last = functions.drop(board)
             functions.printBoard(board)
         board = functions.hashify(board)
+        if "#" in board[1]:
+            touchingTop = True
+    functions.printBoard(board)
+    print("Game over!")
 else:
     print("nah bro")
