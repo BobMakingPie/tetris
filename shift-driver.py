@@ -10,14 +10,14 @@ board = [
 "..........",
 "..........",
 "..........",
-"########.x",
-".........x",
-"........xo",
+"######.x..",
+".......x..",
+".......ox.",
 "########..",
 "####.#####",
 "##########",
 "##########"
 ]
 functions.printBoard(board)
-board, last = functions.drop(board)
+board = functions.shift(board, "r")
 functions.printBoard(board)

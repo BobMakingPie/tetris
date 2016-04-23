@@ -42,6 +42,10 @@ def hashify(board): ### Turn the active (movable) piece to hashes.
 def rotate(board, dir, pieceName): ### Rotate the active piece in the direction specified (or passes through if no direction specified) (in a really roundabout fashion)
     ### Inputs: board (list), dir (str), pieceName (str)
     ### Returns: board (list)
+
+    # I just noticed "dir" is an inbuilt function but I don't want to find/replace
+    # it for fear of this entire thing commiting suicide
+
     ## Set turn direction as a boolean (I am lazy)
     if pieceName == "o":
         return board
@@ -97,6 +101,10 @@ def rotate(board, dir, pieceName): ### Rotate the active piece in the direction 
 def drop(board): ### Drops the active piece by 1.
     ### Inputs: board (list)
     ### Outputs: board (list)
+    # Yes, the code in this one is very messy as I lost track between sessions
+    #   After pondering for a bit I've found a much more efficient solution
+    #   that's way more elegant but I've already written this and it works soooo
+
     ## Store current board in preProcessBoard (for some reason simple assig.
     ## does not work)
     preProcessBoard = []
@@ -156,9 +164,7 @@ def drop(board): ### Drops the active piece by 1.
                 heal = list(board[line])
                 heal[linePiece[0]] = "."
                 board[line] = "".join(heal)
-            print(toDrop)
             lineList = list(board[line + 1])
-            print(lineList[linePiece[0]:linePiece[1] + 1])
             lineList[linePiece[0]:linePiece[1] + 1] = toDrop
             board[line + 1] = "".join(lineList)
         ## Heal line above dropped piece
@@ -170,3 +176,74 @@ def drop(board): ### Drops the active piece by 1.
 
     ## Return the board
     return board, last
+
+def shift(board, direction): ### Shift the active piece by 1 in direction specified
+    ### Inputs: board (list), dir (str)
+    ### Outputs: board (list)
+    ## Find lines of piece
+    pieceLines = []
+    for i in range(len(board)):
+        line = board[i]
+        if "x" in line or "o" in line:
+            pieceLines.append(i)
+
+    ## Find parts of line etc etc (totally not copy pasted from above) (yes i couldve made another function for this but im lazy)
+    piece = {}
+    for i in pieceLines:
+        o = None
+        line = board[i]
+        if "o" in line:
+            if not "x" in line:
+                firstInstance = line.index("o")
+                lastInstance = line.index("o")
+            else:
+                firstInstance = None
+                if line.index("x") < line.index("o"):
+                    firstInstance = line.index("x")
+                else:
+                    firstInstance = line.index("o")
+
+                lastInstance = None
+                if line[::-1].index("x") < line[::-1].index("o"):
+                    lastInstance = 9 - line[::-1].index("x")
+                else:
+                    lastInstance = line.index("o")
+                o = line.index("o")
+        else:
+            firstInstance = line.index("x")
+            lastInstance = 9 - line[::-1].index("x")
+        piece[i] = [firstInstance, lastInstance, o]
+
+    ## Heal parts of board where current piece is
+    for i in pieceLines:
+        line = list(board[i])
+        cols = piece[i]
+        line[cols[0]:cols[1] + 1] = "." * (cols[1] + 1 - cols[0])
+        board[i] = "".join(line)
+
+    ## Numerically shift (?) piece
+    if direction == "l":
+        for i in pieceLines:
+            piece[i][:2] = [m - 1 for m in piece[i][:2]]
+            if piece[i][2]:
+                piece[i][2] -= 1
+    else:
+        for i in pieceLines:
+            piece[i][:2] = [m + 1 for m in piece[i][:2]]
+            if piece[i][2]:
+                piece[i][2] += 1
+
+    ## "Render" shifted piece on to board
+    for i in pieceLines:
+        line = list(board[i])
+        line[piece[i][0]:piece[i][1] + 1] = "x" * (piece[i][1] + 1 - piece[i][0])
+        board[i] = "".join(line)
+
+    ## Replace anchor point (known as the "o")
+    for i in pieceLines:
+        if piece[i][2]:
+            line = list(board[i])
+            line[piece[i][2]] = "o"
+            board[i] = "".join(line)
+
+    return board

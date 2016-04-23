@@ -60,17 +60,31 @@ if functions.memes == "dank":
                         board = functions.rotate(board, direction, pieceName)
                         functions.printBoard(board)
                     else:
-                        print("Invalid rotate direction")
+                        print("Invalid rotate direction.")
+                elif command[0] == "s" and len(command) == 2:
+                    if command[1] in ["r", "l"]:
+                        instruct = True
+                        direction = command[1]
+                        board = functions.shift(board, direction)
+                        functions.printBoard(board)
+                    else:
+                        print("Invalid rotate direction.")
                 else:
-                    print("Invalid command")
+                    print("Invalid command.")
 
             ## Drop piece one unit
             board, last = functions.drop(board)
             functions.printBoard(board)
         board = functions.hashify(board)
+        while "##########" in board[:-1]:
+            no = board[:-1].index("##########")
+            del board[no]
+            board.insert(1, "..........")
         if "#" in board[1]:
             touchingTop = True
     functions.printBoard(board)
-    print("Game over!")
+    print("##################")
+    print("### Game over! ###")
+    print("##################")
 else:
     print("nah bro")

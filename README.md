@@ -1,5 +1,7 @@
 # Tetris #
-A simple ASCII clone of Tetris
+A simple ASCII clone of Tetris, minus the whole time aspect.
+
+(You know, the bit that makes it fun)
 
 ### Usage ###
 Clone repo (you can figure it out)
@@ -14,4 +16,5 @@ python main.py
 
 ### Memes ###
 This is a private repo, why am I bothering
+
 Well, now it's public, but I ceebs updating this
