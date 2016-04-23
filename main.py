@@ -32,7 +32,7 @@ if functions.memes == "dank":
             instruct = False
             while not instruct:
                 ## Rotate/move piece
-                command = list(input("Command (type \"h\" for help): ").lower().strip())
+                command = input("Command (type \"h\" for help): ").lower().strip()
                 if not command:
                     print("Invalid command.")
                 elif command == "'":
@@ -45,7 +45,7 @@ if functions.memes == "dank":
                     print()
                     print("Shift right: type \".\"")
                     print()
-                    prinT("Shift left: type \",\"")
+                    print("Shift left: type \",\"")
                     print()
                     print("Drop: \"'\"")
                     print("      Drop piece without performing an action")
