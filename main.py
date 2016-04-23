@@ -75,11 +75,17 @@ if functions.memes == "dank":
             ## Drop piece one unit
             board, last = functions.drop(board)
             functions.printBoard(board)
+        ## When piece cannot be dropped, render it as hashes and continue
         board = functions.hashify(board)
+
+        ## Check for line clears
         while "##########" in board[:-1]:
+            ## Clear lines and insert new
             no = board[:-1].index("##########")
             del board[no]
             board.insert(1, "..........")
+
+        ## Trigger game over
         if "#" in board[1]:
             touchingTop = True
     functions.printBoard(board)

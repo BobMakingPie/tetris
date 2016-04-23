@@ -208,11 +208,12 @@ def shift(board, direction): ### Shift the active piece by 1 in direction specif
                     lastInstance = 9 - line[::-1].index("x")
                 else:
                     lastInstance = line.index("o")
-                o = line.index("o")
+            o = line.index("o")
         else:
             firstInstance = line.index("x")
             lastInstance = 9 - line[::-1].index("x")
         piece[i] = [firstInstance, lastInstance, o]
+        print(piece)
 
     ## Heal parts of board where current piece is
     for i in pieceLines:
@@ -242,6 +243,7 @@ def shift(board, direction): ### Shift the active piece by 1 in direction specif
     ## Replace anchor point (known as the "o")
     for i in pieceLines:
         if piece[i][2]:
+            print("yeboi")
             line = list(board[i])
             line[piece[i][2]] = "o"
             board[i] = "".join(line)
