@@ -29,6 +29,7 @@ if functions.memes == "dank":
 
         last = False
         while not last:
+            ## Take input from user
             instruct = False
             while not instruct:
                 ## Rotate/move piece
@@ -78,6 +79,7 @@ if functions.memes == "dank":
             ## Drop piece one unit
             board, last = functions.drop(board)
             functions.printBoard(board)
+
         ## When piece cannot be dropped, render it as hashes and continue
         board = functions.hashify(board)
 
@@ -95,5 +97,6 @@ if functions.memes == "dank":
     print("##################")
     print("### Game over! ###")
     print("##################")
+
 else:
     print("nah bro")

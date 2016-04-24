@@ -143,9 +143,33 @@ def drop(board): ### Drops the active piece by 1.
             lastInstance = 9 - line[::-1].index("x")
         piece[i] = [firstInstance, lastInstance]
 
-    ## Drop the piece
+    ## Detect which spots the piece will fall into and validate
     pieceBot = piece[pieceLines[-1]]
-    if "#" in board[pieceLines[-1] + 1][pieceBot[0]:pieceBot[1] + 1]:
+    coordsCheck = []
+    left = None
+    right = None
+    for i in pieceLines:
+        if left != None:
+            if left[0] > piece[i][0]:
+                left = [piece[i][0], i]
+            if right[0] < piece[i][1]:
+                right = [piece[i][1], i]
+        else:
+            left = [piece[i][0], i]
+            right = [piece[i][1], i]
+    for i in range(pieceBot[0], pieceBot[1] + 1):
+        coordsCheck.append([i, pieceLines[-1] + 1])
+    if left[0] < coordsCheck[0][0]:
+        coordsCheck.append([left[0], left[1] + 1])
+    if right[0] > sorted(i[0] for i in coordsCheck)[-1]:
+        coordsCheck.append([right[0], right[1] + 1])
+
+    futurePiece = []
+    for i in coordsCheck:
+        futurePiece.append(board[i[1]][i[0]])
+
+    # Drop the piece
+    if "#" in futurePiece:
         ## Refuse to drop if it is the last possible drop
         last = True
     else:
