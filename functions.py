@@ -150,9 +150,9 @@ def drop(board): ### Drops the active piece by 1.
     right = None
     for i in pieceLines:
         if left != None:
-            if left[0] > piece[i][0]:
+            if left[0] >= piece[i][0]:
                 left = [piece[i][0], i]
-            if right[0] < piece[i][1]:
+            if right[0] <= piece[i][1]:
                 right = [piece[i][1], i]
         else:
             left = [piece[i][0], i]
