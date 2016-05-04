@@ -2,7 +2,8 @@ import random
 
 memes = "dank"
 
-## i went through much pain and suffering to make this please enjoy it
+## ram doesn't like me calling my module "functions.py"
+## but i dont wanna change it
 
 def printBoard(board): ### Print the board, line for line.
     ### Input: board (list)
@@ -249,12 +250,13 @@ def shift(board, direction): ### Shift the active piece by 1 in direction specif
     if direction == "l":
         for i in pieceLines:
             piece[i][:2] = [m - 1 for m in piece[i][:2]]
-            if piece[i][2]:
+            if piece[i][2] != None:
                 piece[i][2] -= 1
     else:
         for i in pieceLines:
             piece[i][:2] = [m + 1 for m in piece[i][:2]]
-            if piece[i][2]:
+            if piece[i][2] != None:
+                print("meme")
                 piece[i][2] += 1
 
     ## "Render" shifted piece on to board
