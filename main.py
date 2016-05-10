@@ -1,6 +1,5 @@
-import functions, random
-
-if functions.memes == "dank":
+import functions
+if 1 == 1:
     ##### Place pieces in a dictionary
     ## Define lists/dictionary
     pieceNames = ["i", "j", "l", "o", "s", "t", "z"]
@@ -36,8 +35,12 @@ if functions.memes == "dank":
                 command = input("Command (type \"h\" for help): ").lower().strip()
                 if not command:
                     print("Invalid command.")
+
+                # DROP
                 elif command == "'":
                     instruct = True
+
+                # HELP
                 elif command == "h":
                     print("Commands:")
                     print("Rotate right: type \"]\"")
@@ -53,26 +56,47 @@ if functions.memes == "dank":
                     print()
                     print("Help: type \"h\"")
                     print("      Display this help text")
+
+                # ROTATE RIGHT
                 elif command == "]":
-                    instruct = True
                     direction = "r"
-                    board = functions.rotate(board, direction, pieceName)
-                    functions.printBoard(board)
+                    if functions.verify(board, "rotate", direction):
+                        instruct = True
+                        board = functions.rotate(board, direction, pieceName)
+                        functions.printBoard(board)
+                    else:
+                        print("Invalid move.")
+
+                # ROTATE LEFT
                 elif command == "[":
-                    instruct = True
                     direction = "l"
-                    board = functions.rotate(board, direction, pieceName)
-                    functions.printBoard(board)
+                    if functions.verify(board, "rotate", direction):
+                        instruct = True
+                        board = functions.rotate(board, direction, pieceName)
+                        functions.printBoard(board)
+                    else:
+                        print("Invalid move.")
+
+                # SHIFT RIGHT
                 elif command == ".":
-                    instruct = True
                     direction = "r"
-                    board = functions.shift(board, direction)
-                    functions.printBoard(board)
+                    if functions.verify(board, "shift", direction):
+                        instruct = True
+                        board = functions.shift(board, direction)
+                        functions.printBoard(board)
+                    else:
+                        print("Invalid move.")
+
+                # SHIFT LEFT
                 elif command == ",":
-                    instruct = True
                     direction = "l"
-                    board = functions.shift(board, direction)
-                    functions.printBoard(board)
+                    if functions.verify(board, "shift", direction):
+                        instruct = True
+                        board = functions.shift(board, direction)
+                        functions.printBoard(board)
+                    else:
+                        print("Invalid move.")
+
                 else:
                     print("Invalid command.")
 
@@ -97,6 +121,3 @@ if functions.memes == "dank":
     print("##################")
     print("### Game over! ###")
     print("##################")
-
-else:
-    print("nah bro")

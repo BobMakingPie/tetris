@@ -1,7 +1,5 @@
 import random
 
-memes = "dank"
-
 ## ram doesn't like me calling my module "functions.py"
 ## but i dont wanna change it
 
@@ -45,7 +43,7 @@ def rotate(board, dir, pieceName): ### Rotate the active piece in the direction 
     ### Returns: board (list)
 
     # I just noticed "dir" is an inbuilt function but I don't want to find/replace
-    # it for fear of this entire thing commiting suicide
+    # it for fear of this entire thing breaking
 
     ## Set turn direction as a boolean (I am lazy)
     if pieceName == "o":
@@ -256,7 +254,6 @@ def shift(board, direction): ### Shift the active piece by 1 in direction specif
         for i in pieceLines:
             piece[i][:2] = [m + 1 for m in piece[i][:2]]
             if piece[i][2] != None:
-                print("meme")
                 piece[i][2] += 1
 
     ## "Render" shifted piece on to board
@@ -273,3 +270,109 @@ def shift(board, direction): ### Shift the active piece by 1 in direction specif
             board[i] = "".join(line)
 
     return board
+
+def verify(board, command, direction = None): ### Verify a move to prevent logic errors.
+    ### Inputs: board (list), command (string), direction (string, def is NoneType)
+    ### Outputs: valid (bool)
+
+    ### Yes, I could've gone back and changed the original functions.
+    ### Yes, I am lazy.
+
+    valid = True
+
+    ## Find lines of piece (this looks familiar i wonder why)
+    pieceLines = []
+    for i in range(len(board)):
+        line = board[i]
+        if "x" in line or "o" in line:
+            pieceLines.append(i)
+
+    piece = []
+    for i in pieceLines:
+        line = board[i]
+        if "o" in line:
+            if not "x" in line:
+                firstInstance = line.index("o")
+                lastInstance = line.index("o")
+            else:
+                firstInstance = None
+                if line.index("x") < line.index("o"):
+                    firstInstance = line.index("x")
+                else:
+                    firstInstance = line.index("o")
+
+                lastInstance = None
+                if line[::-1].index("x") < line[::-1].index("o"):
+                    lastInstance = 9 - line[::-1].index("x")
+                else:
+                    lastInstance = line.index("o")
+        else:
+            firstInstance = line.index("x")
+            lastInstance = 9 - line[::-1].index("x")
+        piece.append([i, firstInstance, lastInstance])
+
+    if command == "shift":
+        ## Validate shift
+        ## Find copords of shifted piece
+        if direction == "r":
+            piece = [[i[0], i[1] + 1, i[2] + 1] for i in piece]
+        else:
+            piece = [[i[0], i[1] - 1, i[2] - 1] for i in piece]
+
+        ## Check if any coords are out of bounds
+        for point in piece:
+            for coord in point[1:]:
+                if coord < 0 or coord > 9:
+                    valid = False
+                    break
+
+        ## Check for existing "#" characters in area
+        if valid:
+            for point in piece:
+                toCheck = board[point[0]][point[1]:point[2] + 1]
+                if "#" in toCheck:
+                    valid = False
+                    break
+    elif command == "rotate":
+        ## Validate rotation
+        ## Find each individual coord
+        coords = []
+        for point in piece:
+            for coord in range(point[1], point[2] + 1):
+                if board[point[0]][coord] == "o":
+                    ocoord = [coord, point[0]]
+                else:
+                    coords.append([coord, point[0]])
+
+        ## Find coords in relation to piece origin
+        originCoords = []
+        for coord in coords:
+            originCoords.append([(coord[0] - ocoord[0]), - (coord[1] - ocoord[1])])
+
+        ## Simulate a rotation
+        if direction == "r":
+            rotated = [[i[1], - i[0]] for i in originCoords]
+        else:
+            rotated = [[- i[1], i[0]] for i in originCoords]
+        piece = [[(ocoord[1] - i[1]) - 1, i[0] + ocoord[0]] for i in rotated]
+        ocoord[1] -= 1
+        piece.append(ocoord[::-1])
+
+        ## Check for out of bounds coords
+        for point in piece:
+            if point[0] <= 0 or point[0] >= 17:
+                valid = False
+                break
+            if point[1] > 9 or point[1] < 0:
+                valid = False
+                break
+
+        ## Check for "#" characters
+        if valid:
+            for point in piece:
+                if "#" in board[point[0] + 1][point[1]]:
+                    valid = False
+                    break
+    else:
+        valid = False
+    return valid
