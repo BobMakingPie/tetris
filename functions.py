@@ -360,7 +360,7 @@ def verify(board, command, direction = None): ### Verify a move to prevent logic
 
         ## Check for out of bounds coords
         for point in piece:
-            if point[0] <= 0 or point[0] >= 17:
+            if point[0] <= -1 or point[0] >= 17:
                 valid = False
                 break
             if point[1] > 9 or point[1] < 0:

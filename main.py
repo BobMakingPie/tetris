@@ -63,7 +63,7 @@ if 1 == 1:
                     if functions.verify(board, "rotate", direction):
                         instruct = True
                         board = functions.rotate(board, direction, pieceName)
-                        functions.printBoard(board)
+                        #functions.printBoard(board)
                     else:
                         print("Invalid move.")
 
@@ -73,7 +73,7 @@ if 1 == 1:
                     if functions.verify(board, "rotate", direction):
                         instruct = True
                         board = functions.rotate(board, direction, pieceName)
-                        functions.printBoard(board)
+                        #functions.printBoard(board)
                     else:
                         print("Invalid move.")
 
@@ -83,7 +83,7 @@ if 1 == 1:
                     if functions.verify(board, "shift", direction):
                         instruct = True
                         board = functions.shift(board, direction)
-                        functions.printBoard(board)
+                        #functions.printBoard(board)
                     else:
                         print("Invalid move.")
 
@@ -93,7 +93,7 @@ if 1 == 1:
                     if functions.verify(board, "shift", direction):
                         instruct = True
                         board = functions.shift(board, direction)
-                        functions.printBoard(board)
+                        #functions.printBoard(board)
                     else:
                         print("Invalid move.")
 
